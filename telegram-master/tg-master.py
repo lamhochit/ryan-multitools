@@ -3,9 +3,11 @@ import datetime as dt
 from telethon import TelegramClient, events
 from telethon.sessions import MemorySession
 
+
 # credentials
 api_id = 17377816
 api_hash = '1d7c81bf09b72bf151a4cc67471fc64f'
+
 
 if __name__ == '__main__':
     client = TelegramClient(MemorySession(), api_id, api_hash)
