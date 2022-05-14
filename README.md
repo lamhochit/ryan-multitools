@@ -13,7 +13,7 @@
 
 <br />
 <div align="center">
-  <h3 align="center">ryan-multitools</h3>
+  <h3 align="center">ryan-multitools :wrench:</h3>
 </div>
 
 
