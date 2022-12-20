@@ -5,7 +5,7 @@ import string
 from telethon import TelegramClient, events
 from telethon.sessions import MemorySession
 from telethon.tl.functions.account import UpdateUsernameRequest
-from telethon.errors.rpcerrorlist import UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError
+from telethon.errors.rpcerrorlist import UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError, FloodWaitError
 
 
 # credentials
@@ -35,14 +35,15 @@ async def self_delete_handler(event):
         await event.delete()
 
 
-# Auto changes my username whenever there's a message
+# Auto changes my username whenever there's a private message
 @client.on(events.NewMessage())
 async def change_username_handler(event):
     try:
         characters = string.ascii_letters + string.digits
-        username = ''.join(random.choice(characters) for i in range(10))
-        await client(UpdateUsernameRequest(username=username))
-    except (UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError) as e:
+        username = ''.join(random.choice(characters) for i in range(20))
+        if event.is_private:
+            await client(UpdateUsernameRequest(username=username))
+    except (UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError, FloodWaitError) as e:
         pass
 
 
