@@ -29,7 +29,7 @@ async def greetings_handler(event):
 @client.on(events.NewMessage(outgoing=True, pattern='!change'))
 async def change_username_handler(event):
     try:
-        print('trigger change username')
+        print('trigger change username at {time}'.format(time=dt.datetime.now()))
         characters = string.ascii_letters + string.digits
         username = ''.join(random.choice(characters) for i in range(15))
         await client(UpdateUsernameRequest(username=username))
@@ -43,7 +43,7 @@ async def self_delete_handler(event):
     sender = await event.get_sender()
     me = await client.get_me()
     if sender.username == me.username:
-        print('delete event scheduled')
+        print('delete event scheduled at {time}'.format(time=dt.datetime.now()))
         await asyncio.sleep(3600)
         await event.delete()
 
