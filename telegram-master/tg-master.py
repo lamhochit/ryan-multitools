@@ -35,14 +35,13 @@ async def self_delete_handler(event):
         await event.delete()
 
 
-# Auto changes my username whenever there's a private message
-@client.on(events.NewMessage())
+# Auto changes my username whenever I trigger the command
+@client.on(events.NewMessage(outgoing=True, pattern='change username'))
 async def change_username_handler(event):
     try:
         characters = string.ascii_letters + string.digits
         username = ''.join(random.choice(characters) for i in range(20))
-        if event.is_private:
-            await client(UpdateUsernameRequest(username=username))
+        await client(UpdateUsernameRequest(username=username))
     except (UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError, FloodWaitError) as e:
         pass
 
