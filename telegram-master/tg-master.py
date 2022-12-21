@@ -25,25 +25,27 @@ async def greetings_handler(event):
         await event.respond('hi {name}, how are you?'.format(name=sender.username))
 
 
-# Auto delete messages after 10 minutes
+# Auto changes my username whenever I trigger the command
+@client.on(events.NewMessage(outgoing=True, pattern='!change'))
+async def change_username_handler(event):
+    try:
+        print('trigger change username')
+        characters = string.ascii_letters + string.digits
+        username = ''.join(random.choice(characters) for i in range(15))
+        await client(UpdateUsernameRequest(username=username))
+    except (UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError, FloodWaitError) as e:
+        pass
+
+
+# Auto delete messages after 1 hour
 @client.on(events.NewMessage())
 async def self_delete_handler(event):
     sender = await event.get_sender()
     me = await client.get_me()
     if sender.username == me.username:
-        await asyncio.sleep(600)
+        print('delete event scheduled')
+        await asyncio.sleep(3600)
         await event.delete()
-
-
-# Auto changes my username whenever I trigger the command
-@client.on(events.NewMessage(outgoing=True, pattern='change username'))
-async def change_username_handler(event):
-    try:
-        characters = string.ascii_letters + string.digits
-        username = ''.join(random.choice(characters) for i in range(20))
-        await client(UpdateUsernameRequest(username=username))
-    except (UsernameNotModifiedError, UsernameInvalidError, UsernameOccupiedError, FloodWaitError) as e:
-        pass
 
 
 if __name__ == '__main__':
